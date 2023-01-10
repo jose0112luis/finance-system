@@ -5,7 +5,7 @@ import * as Joi from 'joi';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
+import { UserModule } from './modules/user/user.module';
 import { dataSourceOptions } from './database/dataSource';
 import config from './database/config';
 
