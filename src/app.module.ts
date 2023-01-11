@@ -6,15 +6,8 @@ import * as Joi from 'joi';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './modules/user/user.module';
+import { AccountModule } from './modules/account/account.module';
 import { dataSourceOptions } from './database/dataSource';
-import { TypeAccountService } from './modules/account/services/type-account.service';
-import { AccountService } from './modules/account/services/account.service';
-import { TypeMovementService } from './modules/account/services/type-movement.service';
-import { MovementService } from './modules/account/services/movement.service';
-import { MovementController } from './modules/account/controllers/movement.controller';
-import { TypeMovementController } from './modules/account/controllers/type-movement.controller';
-import { TypeAccountController } from './modules/account/controllers/type-account.controller';
-import { AccountController } from './modules/account/controllers/account.controller';
 import config from './database/config';
 
 @Global()
@@ -35,21 +28,10 @@ import config from './database/config';
     }),
     TypeOrmModule.forRoot(dataSourceOptions),
     UserModule,
+    AccountModule,
   ],
-  controllers: [
-    AppController,
-    MovementController,
-    TypeMovementController,
-    TypeAccountController,
-    AccountController,
-  ],
-  providers: [
-    AppService,
-    TypeAccountService,
-    AccountService,
-    TypeMovementService,
-    MovementService,
-  ],
+  controllers: [AppController],
+  providers: [AppService],
   exports: [TypeOrmModule],
 })
 export class AppModule {}
