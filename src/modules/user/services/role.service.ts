@@ -16,7 +16,7 @@ export class RoleService {
   async findOne(id: number) {
     const role = await this.roleRepo.findOne({ where: { id } });
     if (!role) {
-      throw new NotFoundException(`User ${id} not found`);
+      throw new NotFoundException(`Role ${id} not found`);
     }
     return role;
   }
