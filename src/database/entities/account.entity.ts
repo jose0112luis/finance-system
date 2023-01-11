@@ -1,38 +1,26 @@
 import {
-  Entity,
   Column,
   CreateDateColumn,
-  UpdateDateColumn,
+  Entity,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
-export class User {
+export class Account {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({
     type: 'varchar',
-    length: 255,
-    name: 'identification_card',
+    name: 'account_number',
+    length: 50,
     unique: true,
   })
-  identificationCard: string;
+  accountNumber: string;
 
-  @Column({ type: 'varchar', length: 255 })
-  name: string;
-
-  @Column({ type: 'varchar', length: 255 })
-  lastName: string;
-
-  @Column({ type: 'varchar', length: 255 })
-  phone: string;
-
-  @Column({ type: 'varchar', length: 255 })
-  email: string;
-
-  @Column({ type: 'varchar', length: 255 })
-  password: string; // encrypt
+  @Column({ type: 'numeric', name: 'account_balance' })
+  accountBalance: number;
 
   @Column({ type: 'boolean' })
   state: boolean;
@@ -52,6 +40,7 @@ export class User {
   updateAt: Date;
 
   // TO-DO:
-  // relación 1-* con UserRole[]
-  // relación 1-* con Account[];
+  // relación *-1 con User
+  // relación *-1 con TypeAccount
+  // relación 1-* con Movement[]
 }
