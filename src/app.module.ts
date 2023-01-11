@@ -11,6 +11,10 @@ import { TypeAccountService } from './modules/account/services/type-account.serv
 import { AccountService } from './modules/account/services/account.service';
 import { TypeMovementService } from './modules/account/services/type-movement.service';
 import { MovementService } from './modules/account/services/movement.service';
+import { MovementController } from './modules/account/controllers/movement.controller';
+import { TypeMovementController } from './modules/account/controllers/type-movement.controller';
+import { TypeAccountController } from './modules/account/controllers/type-account.controller';
+import { AccountController } from './modules/account/controllers/account.controller';
 import config from './database/config';
 
 @Global()
@@ -32,7 +36,13 @@ import config from './database/config';
     TypeOrmModule.forRoot(dataSourceOptions),
     UserModule,
   ],
-  controllers: [AppController],
+  controllers: [
+    AppController,
+    MovementController,
+    TypeMovementController,
+    TypeAccountController,
+    AccountController,
+  ],
   providers: [
     AppService,
     TypeAccountService,
