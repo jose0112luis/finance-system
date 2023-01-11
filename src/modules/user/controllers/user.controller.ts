@@ -21,31 +21,26 @@ export class UserController {
   @Get()
   @ApiOperation({ summary: 'List of users' })
   findAll() {
-    return 'this.userService.findAll()';
-    // return this.userService.findAll();
+    return this.userService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
-    return 'this.userService.findOne(id)';
-    // return this.userService.findOne(id);
+    return this.userService.findOne(id);
   }
 
   @Post()
   create(@Body() data: CreateUserDto) {
-    // return 'this.userService.create(data)';
     return this.userService.create(data);
   }
 
   @Put(':id')
   update(@Param('id', ParseIntPipe) id: number, @Body() data: UpdateUserDto) {
-    // return 'this.userService.update(id, data)';
     return this.userService.update(id, data);
   }
 
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: number) {
-    // return 'this.userService.remove(id)';
     return this.userService.remove(id);
   }
 }
