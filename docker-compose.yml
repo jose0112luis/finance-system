@@ -1,0 +1,40 @@
+version: '3.3'
+
+services: 
+  postgresdb:
+    image: postgres:13
+    container_name: postgresdb
+    environment:
+      - POSTGRES_DB=finance_db
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=jlpv123
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_db:/var/lib/postgresql/data
+    networks:
+      - database_net
+    restart: unless-stopped
+
+  pgadmindb:
+    image: dpage/pgadmin4
+    container_name: pgadmindb
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=jose@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=123jlpv
+    ports:
+      - "5051:80"
+    volumes:
+      - pgadmin_db:/var/lib/pgadmin
+    networks:
+      - database_net
+    depends_on:
+      - postgresdb
+    restart: unless-stopped
+
+volumes:
+  postgres_db:
+  pgadmin_db:
+
+networks:
+  database_net:
