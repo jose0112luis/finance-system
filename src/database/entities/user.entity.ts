@@ -4,7 +4,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   PrimaryGeneratedColumn,
+  OneToMany,
 } from 'typeorm';
+
+import { UserRole } from './userRol.entity';
+import { Account } from './account.entity';
 
 @Entity()
 export class User {
@@ -51,7 +55,11 @@ export class User {
   })
   updateAt: Date;
 
-  // TO-DO:
   // relación 1-* con UserRole[]
+  @OneToMany(() => UserRole, (userRole) => userRole.user)
+  userRole: UserRole;
+
   // relación 1-* con Account[];
+  @OneToMany(() => Account, (account) => account.user)
+  accounts: Account[];
 }

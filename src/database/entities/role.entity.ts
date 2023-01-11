@@ -2,9 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+import { UserRole } from './userRol.entity';
 
 @Entity()
 export class Role {
@@ -28,6 +31,7 @@ export class Role {
   })
   updateAt: Date;
 
-  // TO-DO:
   // relación 1-* con UserRole[]
+  @OneToMany(() => UserRole, (userRole) => userRole.role)
+  userRol: UserRole;
 }

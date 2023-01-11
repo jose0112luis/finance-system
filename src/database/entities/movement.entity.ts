@@ -2,9 +2,14 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+import { Account } from './account.entity';
+import { TypeMovement } from './typeMovement.entity';
 
 @Entity()
 export class Movement {
@@ -28,7 +33,16 @@ export class Movement {
   })
   updateAt: Date;
 
-  // TO-DO:
   // relación *-1 con Account
+  @ManyToOne(() => Account, (account) => account.movements, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn()
+  account: Account;
+
   // relación *-1 con TypeMovement
+  @ManyToOne(() => TypeMovement, (typeMovement) => typeMovement.movements)
+  @JoinColumn()
+  typeMovement: TypeMovement;
 }

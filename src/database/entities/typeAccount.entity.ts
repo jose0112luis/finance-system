@@ -2,9 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+import { Account } from './account.entity';
 
 @Entity()
 export class TypeAccount {
@@ -28,6 +31,7 @@ export class TypeAccount {
   })
   updateAt: Date;
 
-  // TO-DO:
   // relación 1-* con Account[]
+  @OneToMany(() => Account, (account) => account.typeAccount)
+  accounts: Account[];
 }

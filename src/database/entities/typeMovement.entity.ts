@@ -2,9 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Movement } from './movement.entity';
 
 @Entity()
 export class TypeMovement {
@@ -31,6 +33,7 @@ export class TypeMovement {
   })
   updateAt: Date;
 
-  // TO-DO:
   // relación 1-* con Movement[]
+  @OneToMany(() => Movement, (movement) => movement.typeMovement)
+  movements: Movement[];
 }

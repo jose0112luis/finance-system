@@ -1,9 +1,14 @@
 import {
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+import { Role } from './role.entity';
+import { User } from './user.entity';
 
 @Entity()
 export class UserRole {
@@ -24,7 +29,19 @@ export class UserRole {
   })
   updateAt: Date;
 
-  // TO-DO:
   // relación *-1 con Role
-  // relación *-1 User
+  @ManyToOne(() => Role, (role) => role.userRol, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn()
+  role: Role;
+
+  // relación *-1 con User
+  @ManyToOne(() => User, (user) => user.userRole, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn()
+  user: User;
 }
