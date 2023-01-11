@@ -1,8 +1,8 @@
-import { IsDecimal, IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 
 export class CreateMovementDto {
-  @IsDecimal({ decimal_digits: '6,2' })
+  @IsNumber()
   @IsNotEmpty()
   @ApiProperty()
   readonly amount: number;
