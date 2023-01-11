@@ -7,6 +7,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './modules/user/user.module';
 import { dataSourceOptions } from './database/dataSource';
+import { TypeAccountService } from './modules/account/services/type-account.service';
+import { AccountService } from './modules/account/services/account.service';
+import { TypeMovementService } from './modules/account/services/type-movement.service';
+import { MovementService } from './modules/account/services/movement.service';
 import config from './database/config';
 
 @Global()
@@ -29,7 +33,13 @@ import config from './database/config';
     UserModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    TypeAccountService,
+    AccountService,
+    TypeMovementService,
+    MovementService,
+  ],
   exports: [TypeOrmModule],
 })
 export class AppModule {}
