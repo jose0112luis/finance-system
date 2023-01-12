@@ -5,10 +5,12 @@ import {
   UpdateDateColumn,
   PrimaryGeneratedColumn,
   OneToMany,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 
-import { UserRole } from './userRol.entity';
 import { Account } from './account.entity';
+import { Role } from './role.entity';
 
 @Entity()
 export class User {
@@ -55,11 +57,12 @@ export class User {
   })
   updateAt: Date;
 
-  // relación 1-* con UserRole[]
-  @OneToMany(() => UserRole, (userRole) => userRole.user)
-  userRole: UserRole;
-
   // relación 1-* con Account[];
   @OneToMany(() => Account, (account) => account.user)
   accounts: Account[];
+
+  // relación *-* con Role[]
+  @ManyToMany(() => Role, (role) => role.users)
+  @JoinTable() // solo debe ir en un lado de la relación
+  roles: Role[];
 }

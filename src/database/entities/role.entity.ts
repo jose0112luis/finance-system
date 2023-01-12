@@ -2,12 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-import { UserRole } from './userRol.entity';
+import { User } from './user.entity';
 
 @Entity()
 export class Role {
@@ -31,7 +31,7 @@ export class Role {
   })
   updateAt: Date;
 
-  // relación 1-* con UserRole[]
-  @OneToMany(() => UserRole, (userRole) => userRole.role)
-  userRol: UserRole;
+  // relación *-* con User[]
+  @ManyToMany(() => User, (user) => user.roles)
+  users: User[];
 }
