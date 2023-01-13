@@ -2,13 +2,18 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { Account } from 'src/database/entities/account.entity';
 import { CreateAccountDto, UpdateAccountDto } from '../dto/account.dto';
+import { Account } from 'src/database/entities/account.entity';
+import { TypeAccount } from 'src/database/entities/typeAccount.entity';
+import { User } from 'src/database/entities/user.entity';
 
 @Injectable()
 export class AccountService {
   constructor(
     @InjectRepository(Account) private accountRepo: Repository<Account>,
+    @InjectRepository(TypeAccount)
+    private typeAccountRepo: Repository<TypeAccount>,
+    @InjectRepository(User) private userRepo: Repository<User>,
   ) {}
 
   findAll() {
@@ -16,7 +21,10 @@ export class AccountService {
   }
 
   async findOne(id: number) {
-    const account = await this.accountRepo.findOne({ where: { id } });
+    const account = await this.accountRepo.findOne({
+      where: { id },
+      relations: ['user', 'typeAccount'],
+    });
     if (!account) {
       throw new NotFoundException(`Account ${id} not found`);
     }
@@ -25,6 +33,12 @@ export class AccountService {
 
   async create(data: CreateAccountDto) {
     const newAccount = this.accountRepo.create(data);
+    const typeAcc = await this.typeAccountRepo.findOne({
+      where: { id: data.typeAccountId },
+    });
+    const user = await this.userRepo.findOne({ where: { id: data.userId } });
+    newAccount.typeAccount = typeAcc;
+    newAccount.user = user;
     return this.accountRepo.save(newAccount);
   }
 
