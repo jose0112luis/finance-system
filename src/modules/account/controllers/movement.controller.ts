@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { MovementService } from '../services/movement.service';
 import { CreateMovementDto, UpdateMovementDto } from '../dto/movement.dto';
 
