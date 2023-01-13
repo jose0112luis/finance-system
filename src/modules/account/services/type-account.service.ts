@@ -1,18 +1,20 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Equal, Repository } from 'typeorm';
 
-import { TypeAccount } from '../../../database/entities/typeAccount.entity';
 import {
   CreateTypeAccountDto,
   UpdateTypeAccountDto,
 } from '../dto/typeAccount.dto';
+import { TypeAccount } from '../../../database/entities/typeAccount.entity';
+import { Account } from 'src/database/entities/account.entity';
 
 @Injectable()
 export class TypeAccountService {
   constructor(
     @InjectRepository(TypeAccount)
     private typeAccountRepo: Repository<TypeAccount>,
+    @InjectRepository(Account) private accountRepo: Repository<Account>,
   ) {}
 
   findAll() {
@@ -21,10 +23,18 @@ export class TypeAccountService {
 
   async findOne(id: number) {
     const typeAccount = await this.typeAccountRepo.findOne({ where: { id } });
+    const countAccount = await this.accountRepo.count({
+      where: {
+        typeAccount: Equal(id),
+      },
+    });
     if (!typeAccount) {
       throw new NotFoundException(`Type Account ${id} not found`);
     }
-    return typeAccount;
+    return {
+      typeAccount,
+      totalAccounts: countAccount,
+    };
   }
 
   async create(data: CreateTypeAccountDto) {
