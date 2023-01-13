@@ -53,7 +53,7 @@ export class MovementService {
     return this.movementRepo.save(movement);
   }
 
-  remove(id: number) {
-    return this.movementRepo.delete(id);
-  }
+  // remove(id: number) {
+  //   return this.movementRepo.delete(id);
+  // }
 }

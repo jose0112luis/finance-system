@@ -48,7 +48,7 @@ export class AccountService {
     return this.accountRepo.save(account);
   }
 
-  remove(id: number) {
-    return this.accountRepo.delete(id);
-  }
+  // remove(id: number) {
+  //   return this.accountRepo.delete(id);
+  // }
 }

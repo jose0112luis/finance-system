@@ -83,7 +83,7 @@ export class UserService {
     return this.userRepo.save(user);
   }
 
-  remove(id: number) {
-    return this.userRepo.delete(id);
-  }
+  // remove(id: number) {
+  //   return this.userRepo.delete(id);
+  // }
 }

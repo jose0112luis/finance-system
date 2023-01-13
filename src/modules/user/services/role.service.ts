@@ -35,7 +35,7 @@ export class RoleService {
     return this.roleRepo.save(role);
   }
 
-  remove(id: number) {
-    return this.roleRepo.delete(id);
-  }
+  // remove(id: number) {
+  //   return this.roleRepo.delete(id);
+  // }
 }

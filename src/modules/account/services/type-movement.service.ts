@@ -38,7 +38,7 @@ export class TypeMovementService {
     return this.typeMovementRepo.save(typeMovement);
   }
 
-  remove(id: number) {
-    return this.typeMovementRepo.delete(id);
-  }
+  // remove(id: number) {
+  //   return this.typeMovementRepo.delete(id);
+  // }
 }
