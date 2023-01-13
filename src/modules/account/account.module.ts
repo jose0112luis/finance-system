@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { TypeMovementController } from './controllers/type-movement.controller';
@@ -17,7 +17,7 @@ import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
-    UserModule,
+    forwardRef(() => UserModule),
     TypeOrmModule.forFeature([TypeMovement, Movement, TypeAccount, Account]),
   ],
   controllers: [
