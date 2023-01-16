@@ -16,8 +16,12 @@ export class AccountService {
     @InjectRepository(User) private userRepo: Repository<User>,
   ) {}
 
-  findAll() {
-    return this.accountRepo.find();
+  async findAll() {
+    const accounts = await this.accountRepo.find();
+    if (accounts.length === 0) {
+      throw new NotFoundException('No Registered Accounts Yet');
+    }
+    return accounts;
   }
 
   async findOne(id: number) {
@@ -32,11 +36,27 @@ export class AccountService {
   }
 
   async create(data: CreateAccountDto) {
+    const account = await this.accountRepo.findOne({
+      where: { accountNumber: data.accountNumber },
+    });
+    if (account) {
+      throw new NotFoundException(
+        `Account ${data.accountNumber} already exists`,
+      );
+    }
     const newAccount = this.accountRepo.create(data);
     const typeAcc = await this.typeAccountRepo.findOne({
       where: { id: data.typeAccountId },
     });
+    if (!typeAcc) {
+      throw new NotFoundException(
+        `Account Type ${data.typeAccountId} does not exist`,
+      );
+    }
     const user = await this.userRepo.findOne({ where: { id: data.userId } });
+    if (!user) {
+      throw new NotFoundException(`User ${data.userId} does not exist`);
+    }
     newAccount.typeAccount = typeAcc;
     newAccount.user = user;
     return this.accountRepo.save(newAccount);
@@ -44,6 +64,9 @@ export class AccountService {
 
   async update(id: number, data: UpdateAccountDto) {
     const account = await this.accountRepo.findOne({ where: { id } });
+    if (!account) {
+      throw new NotFoundException(`Account ${id} does not exist`);
+    }
     this.accountRepo.merge(account, data);
     return this.accountRepo.save(account);
   }

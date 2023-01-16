@@ -15,8 +15,12 @@ export class TypeMovementService {
     private typeMovementRepo: Repository<TypeMovement>,
   ) {}
 
-  findAll() {
-    return this.typeMovementRepo.find();
+  async findAll() {
+    const typeMov = await this.typeMovementRepo.find();
+    if (typeMov.length === 0) {
+      throw new NotFoundException('No Registered Movement Type Yet');
+    }
+    return typeMov;
   }
 
   async findOne(id: number) {
@@ -28,12 +32,21 @@ export class TypeMovementService {
   }
 
   async create(data: CreateTypeMovementDto) {
+    const typeMov = await this.typeMovementRepo.findOne({
+      where: { name: data.name },
+    });
+    if (typeMov) {
+      throw new NotFoundException(`Movement Type ${data.name} already exists`);
+    }
     const newTypeMovement = this.typeMovementRepo.create(data);
     return this.typeMovementRepo.save(newTypeMovement);
   }
 
   async update(id: number, data: UpdateTypeMovementDto) {
     const typeMovement = await this.typeMovementRepo.findOne({ where: { id } });
+    if (!typeMovement) {
+      throw new NotFoundException(`Movement Type ${id} does not exist`);
+    }
     this.typeMovementRepo.merge(typeMovement, data);
     return this.typeMovementRepo.save(typeMovement);
   }

@@ -15,8 +15,12 @@ export class UserService {
     @InjectRepository(Account) private accountRepo: Repository<Account>,
   ) {}
 
-  findAll() {
-    return this.userRepo.find();
+  async findAll() {
+    const users = await this.userRepo.find();
+    if (users.length === 0) {
+      throw new NotFoundException('No Registered Users Yet');
+    }
+    return users;
   }
 
   async findOne(id: number) {
@@ -58,15 +62,29 @@ export class UserService {
       where: { id: idAccount, user: Equal(idUser) },
       relations: ['typeAccount', 'user', 'movements', 'movements.typeMovement'],
     });
+    if (movements.movements.length === 0) {
+      throw new NotFoundException('No Registered Movements yet');
+    }
     return movements;
   }
 
   async create(data: CreateUserDto) {
+    const user = await this.userRepo.findOne({
+      where: { identificationCard: data.identificationCard },
+    });
+    if (user) {
+      throw new NotFoundException(
+        `User ${data.identificationCard} already exists`,
+      );
+    }
     const newUser = this.userRepo.create(data);
     if (data.rolesIds) {
       const roles = await this.roleRepo.find({
         where: { id: In(data.rolesIds) }, // In permite recibir un array de number
       });
+      if (roles.length === 0) {
+        throw new NotFoundException("User Roles Don't exist");
+      }
       newUser.roles = roles;
     }
     return this.userRepo.save(newUser);
@@ -74,10 +92,16 @@ export class UserService {
 
   async update(id: number, data: UpdateUserDto) {
     const user = await this.userRepo.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundException(`User ${id} not fount`);
+    }
     if (data.rolesIds) {
       const roles = await this.roleRepo.find({
         where: { id: In(data.rolesIds) },
       });
+      if (roles.length === 0) {
+        throw new NotFoundException("User Roles Don't exist");
+      }
       user.roles = roles;
     }
     return this.userRepo.save(user);

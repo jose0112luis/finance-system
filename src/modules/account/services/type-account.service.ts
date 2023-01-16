@@ -17,20 +17,24 @@ export class TypeAccountService {
     @InjectRepository(Account) private accountRepo: Repository<Account>,
   ) {}
 
-  findAll() {
-    return this.typeAccountRepo.find();
+  async findAll() {
+    const typeAcc = await this.typeAccountRepo.find();
+    if (typeAcc.length === 0) {
+      throw new NotFoundException('No Registered Account Type Yet');
+    }
+    return typeAcc;
   }
 
   async findOne(id: number) {
     const typeAccount = await this.typeAccountRepo.findOne({ where: { id } });
+    if (!typeAccount) {
+      throw new NotFoundException(`Type Account ${id} not found`);
+    }
     const countAccount = await this.accountRepo.count({
       where: {
         typeAccount: Equal(id),
       },
     });
-    if (!typeAccount) {
-      throw new NotFoundException(`Type Account ${id} not found`);
-    }
     return {
       typeAccount,
       totalAccounts: countAccount,
@@ -38,12 +42,21 @@ export class TypeAccountService {
   }
 
   async create(data: CreateTypeAccountDto) {
+    const typeAcc = await this.typeAccountRepo.findOne({
+      where: { name: data.name },
+    });
+    if (typeAcc) {
+      throw new NotFoundException(`Account Type ${data.name} already exists`);
+    }
     const newTypeAccount = this.typeAccountRepo.create(data);
     return this.typeAccountRepo.save(newTypeAccount);
   }
 
   async update(id: number, data: UpdateTypeAccountDto) {
     const typeAccount = await this.typeAccountRepo.findOne({ where: { id } });
+    if (!typeAccount) {
+      throw new NotFoundException(`Account Type ${id} does not exist`);
+    }
     this.typeAccountRepo.merge(typeAccount, data);
     return this.typeAccountRepo.save(typeAccount);
   }

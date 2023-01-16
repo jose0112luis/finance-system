@@ -16,8 +16,12 @@ export class MovementService {
     @InjectRepository(Account) private accountRepo: Repository<Account>,
   ) {}
 
-  findAll() {
-    return this.movementRepo.find();
+  async findAll() {
+    const movements = await this.movementRepo.find();
+    if (movements.length === 0) {
+      throw new NotFoundException('No Registered Movements Yet');
+    }
+    return movements;
   }
 
   async findOne(id: number) {
@@ -49,6 +53,9 @@ export class MovementService {
 
   async update(id: number, data: UpdateMovementDto) {
     const movement = await this.movementRepo.findOne({ where: { id } });
+    if (!movement) {
+      throw new NotFoundException(`Movement ${id} does not exist`);
+    }
     this.movementRepo.merge(movement, data);
     return this.movementRepo.save(movement);
   }

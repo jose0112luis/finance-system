@@ -9,8 +9,12 @@ import { CreateRoleDto, UpdateRoleDto } from '../dto/role.dto';
 export class RoleService {
   constructor(@InjectRepository(Role) private roleRepo: Repository<Role>) {}
 
-  findAll() {
-    return this.roleRepo.find();
+  async findAll() {
+    const roles = await this.roleRepo.find();
+    if (roles.length === 0) {
+      throw new NotFoundException('No Registered Roles Yet');
+    }
+    return roles;
   }
 
   async findOne(id: number) {
@@ -25,12 +29,19 @@ export class RoleService {
   }
 
   async create(data: CreateRoleDto) {
+    const role = await this.roleRepo.findOne({ where: { name: data.name } });
+    if (role) {
+      throw new NotFoundException(`Role ${data.name} already exists`);
+    }
     const newRole = this.roleRepo.create(data);
     return this.roleRepo.save(newRole);
   }
 
   async update(id: number, data: UpdateRoleDto) {
     const role = await this.roleRepo.findOne({ where: { id } });
+    if (!role) {
+      throw new NotFoundException(`Role ${id} not found`);
+    }
     this.roleRepo.merge(role, data);
     return this.roleRepo.save(role);
   }
