@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { TypeMovementController } from './controllers/type-movement.controller';
@@ -13,9 +13,11 @@ import { TypeMovement } from 'src/database/entities/typeMovement.entity';
 import { Movement } from 'src/database/entities/movement.entity';
 import { TypeAccount } from 'src/database/entities/typeAccount.entity';
 import { Account } from 'src/database/entities/account.entity';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
+    forwardRef(() => UserModule),
     TypeOrmModule.forFeature([TypeMovement, Movement, TypeAccount, Account]),
   ],
   controllers: [
@@ -30,5 +32,6 @@ import { Account } from 'src/database/entities/account.entity';
     TypeAccountService,
     AccountService,
   ],
+  exports: [TypeOrmModule],
 })
 export class AccountModule {}

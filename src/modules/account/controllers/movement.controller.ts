@@ -5,11 +5,12 @@ import {
   Post,
   Body,
   Put,
-  Delete,
+  // Delete,
   ParseIntPipe,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { MovementService } from '../services/movement.service';
 import { CreateMovementDto, UpdateMovementDto } from '../dto/movement.dto';
 
@@ -42,8 +43,8 @@ export class MovementController {
     return this.MovementService.update(id, data);
   }
 
-  @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.MovementService.remove(id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id', ParseIntPipe) id: number) {
+  //   return this.MovementService.remove(id);
+  // }
 }

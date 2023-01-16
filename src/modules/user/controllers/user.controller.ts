@@ -5,7 +5,7 @@ import {
   Post,
   Body,
   Put,
-  Delete,
+  // Delete,
   ParseIntPipe,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
@@ -29,6 +29,19 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
+  @Get(':id/accounts')
+  findAccountsByUser(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.findAccountsByUser(id);
+  }
+
+  @Get(':idUser/account/:idAccount/movements')
+  findMovementsByAccountByUser(
+    @Param('idUser', ParseIntPipe) idUser: number,
+    @Param('idAccount', ParseIntPipe) idAccount: number,
+  ) {
+    return this.userService.findMovementsByAccountByUser(idUser, idAccount);
+  }
+
   @Post()
   create(@Body() data: CreateUserDto) {
     return this.userService.create(data);
@@ -39,8 +52,8 @@ export class UserController {
     return this.userService.update(id, data);
   }
 
-  @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.userService.remove(id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id', ParseIntPipe) id: number) {
+  //   return this.userService.remove(id);
+  // }
 }

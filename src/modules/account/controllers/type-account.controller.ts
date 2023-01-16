@@ -5,7 +5,7 @@ import {
   Post,
   Body,
   Put,
-  Delete,
+  // Delete,
   ParseIntPipe,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
@@ -45,8 +45,8 @@ export class TypeAccountController {
     return this.typeAccountService.update(id, data);
   }
 
-  @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.typeAccountService.remove(id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id', ParseIntPipe) id: number) {
+  //   return this.typeAccountService.remove(id);
+  // }
 }

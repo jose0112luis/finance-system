@@ -6,7 +6,16 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  getHello() {
+    return {
+      Title: 'Finance System',
+      Author: 'José Luis Parra Vite',
+      Technologies: {
+        DataBase: 'PostgreSQL',
+        Language: 'NodeJs',
+        Framework: 'NestJs',
+        Others: ['TypeORM', 'Postman', 'Swagger', 'Environment Variables'],
+      },
+    };
   }
 }

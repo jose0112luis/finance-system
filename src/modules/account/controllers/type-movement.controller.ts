@@ -5,7 +5,7 @@ import {
   Post,
   Body,
   Put,
-  Delete,
+  // Delete,
   ParseIntPipe,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
@@ -45,8 +45,8 @@ export class TypeMovementController {
     return this.typeMovementService.update(id, data);
   }
 
-  @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.typeMovementService.remove(id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id', ParseIntPipe) id: number) {
+  //   return this.typeMovementService.remove(id);
+  // }
 }

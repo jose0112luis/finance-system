@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsBoolean,
   IsEmail,
   IsNotEmpty,
@@ -45,6 +46,11 @@ export class CreateUserDto {
   @IsNotEmpty()
   @ApiProperty()
   readonly state: boolean;
+
+  @IsArray()
+  @IsNotEmpty()
+  @ApiProperty({ description: 'Integer Array of Role IDs' })
+  readonly rolesIds: number[];
 }
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}
