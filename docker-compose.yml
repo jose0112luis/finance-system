@@ -7,34 +7,50 @@ services:
     environment:
       - POSTGRES_DB=finance_db
       - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=jlpv123
+      - POSTGRES_PASSWORD=123456
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:
       - postgres_db:/var/lib/postgresql/data
     networks:
-      - database_net
+      - FSystem-net
     restart: unless-stopped
 
   pgadmindb:
     image: dpage/pgadmin4
     container_name: pgadmindb
     environment:
-      - PGADMIN_DEFAULT_EMAIL=jose@gmail.com
-      - PGADMIN_DEFAULT_PASSWORD=123jlpv
+      - PGADMIN_DEFAULT_EMAIL=ejemplo@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=123456
     ports:
-      - "5051:80"
+      - "5050:80"
     volumes:
       - pgadmin_db:/var/lib/pgadmin
     networks:
-      - database_net
+      - FSystem-net
     depends_on:
       - postgresdb
+    restart: unless-stopped
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    privileged: true
+    user: root
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - jenkins_vol:/var/jenkins_home
+    networks:
+      - FSystem-net
     restart: unless-stopped
 
 volumes:
   postgres_db:
   pgadmin_db:
+  jenkins_vol:
 
 networks:
-  database_net:
+  FSystem-net:
