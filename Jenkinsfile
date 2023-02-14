@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   options {
-    timeout(time: 3, unit 'MINUTES')
+    timeout(time: 2, unit: 'MINUTES')
   }
 
   environment {
@@ -18,23 +18,28 @@ pipeline {
       }
     }
 
+    stage('Test') {
+      steps {
+        sh "echo ${env.ARTIFACT_ID}"
+      }
+    }
     // stage('Run tests') {
     //   steps {
     //     sh "docker run ${dockerImage.id} npm test"
-    //   }
+    //   } 
     // }
 
-    stage('Publish') {
-      when {
-        branch 'master'
-      }
-      steps {
-        script {
-          docker.withRegistry("", "DockerHubTest") {
-            dockerImage.push()
-          }
-        }
-      }
-    }
+    // stage('Publish') {
+    //   when {
+    //     branch 'master'
+    //   }
+    //   steps {
+    //     script {
+    //       docker.withRegistry("", "DockerHubTest") {
+    //         dockerImage.push()
+    //       }
+    //     }
+    //   }
+    // }
   }
 }
