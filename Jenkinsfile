@@ -18,28 +18,23 @@ pipeline {
       }
     }
 
-    stage('Test') {
-      steps {
-        sh "echo ${env.ARTIFACT_ID}"
-      }
-    }
     // stage('Run tests') {
     //   steps {
     //     sh "docker run ${dockerImage.id} npm test"
     //   } 
     // }
 
-    // stage('Publish') {
-    //   when {
-    //     branch 'master'
-    //   }
-    //   steps {
-    //     script {
-    //       docker.withRegistry("", "DockerHubTest") {
-    //         dockerImage.push()
-    //       }
-    //     }
-    //   }
-    // }
+    stage('Publish') {
+      when {
+        branch 'master'
+      }
+      steps {
+        script {
+          docker.withRegistry("", "DockerHubFinanceSystem") {
+            dockerImage.push()
+          }
+        }
+      }
+    }
   }
 }
