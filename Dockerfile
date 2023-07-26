@@ -17,10 +17,10 @@ ENV POSTGRES_HOST=localhost
 ENV POSTGRES_PORT=5432
 ENV POSTGRES_USERNAME=root
 ENV POSTGRES_PASSWORD=123456
-ENV POSTGRES_DATABASE=d_nameb
+ENV POSTGRES_DATABASE=finance_db
 
 # Exponer el puerto 3000 en la imagen
-EXPOSE 3000
+EXPOSE 3001
 
 # Iniciar la aplicación
 CMD [ "npm", "start" ]
