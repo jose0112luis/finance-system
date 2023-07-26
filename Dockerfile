@@ -12,7 +12,7 @@ RUN npm install
 COPY . .
 
 # Establecer las variables de entorno a través de un archivo .env
-ENV PORT=3000
+ENV PORT=3001
 ENV POSTGRES_HOST=192.168.0.6
 ENV POSTGRES_PORT=5432
 ENV POSTGRES_USERNAME=root
