@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   options {
-    timeout(time: 2, unit: 'MINUTES')
+    timeout(time: 10, unit: 'MINUTES')
   }
 
   environment {
@@ -18,21 +18,18 @@ pipeline {
       }
     }
 
-    // stage('Run tests') {
-    //   steps {
-    //     sh "docker run ${dockerImage.id} npm test"
-    //   } 
-    // }
-
-    stage('Publish') {
-      when {
-        branch 'master'
+    stage('Login to Docker Hub') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'DockerHubTest', usernameVariable:  'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+          sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+        }
       }
+    }
+
+    stage('Publish to Docker Hub') {
       steps {
         script {
-          docker.withRegistry("", "DockerHubFinanceSystem") {
             dockerImage.push()
-          }
         }
       }
     }
