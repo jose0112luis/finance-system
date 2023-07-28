@@ -24,9 +24,14 @@ export class AccountController {
     return this.accountService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.accountService.findOne(id);
+  // @Get(':id')
+  // findOne(@Param('id', ParseIntPipe) id: number) {
+  //   return this.accountService.findOne(id);
+  // }
+
+  @Get(':idAccount')
+  findOne(@Param('idAccount') idAccount: string) {
+    return this.accountService.findOne(idAccount);
   }
 
   @Post()

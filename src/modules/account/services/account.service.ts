@@ -24,13 +24,24 @@ export class AccountService {
     return accounts;
   }
 
-  async findOne(id: number) {
+  // async findOne(id: number) {
+  //   const account = await this.accountRepo.findOne({
+  //     where: { id },
+  //     relations: ['user', 'typeAccount'],
+  //   });
+  //   if (!account) {
+  //     throw new NotFoundException(`Account ${id} not found`);
+  //   }
+  //   return account;
+  // }
+
+  async findOne(idAccount: string) {
     const account = await this.accountRepo.findOne({
-      where: { id },
+      where: { accountNumber: idAccount },
       relations: ['user', 'typeAccount'],
     });
     if (!account) {
-      throw new NotFoundException(`Account ${id} not found`);
+      throw new NotFoundException(`Account ${idAccount} not found`);
     }
     return account;
   }
