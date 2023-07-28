@@ -24,22 +24,22 @@ export class UserController {
     return this.userService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.userService.findOne(id);
+  @Get(':cedula')
+  findOne(@Param('cedula') cedula: string) {
+    return this.userService.findOne(cedula);
   }
 
-  @Get(':id/accounts')
-  findAccountsByUser(@Param('id', ParseIntPipe) id: number) {
-    return this.userService.findAccountsByUser(id);
+  @Get(':cedula/accounts')
+  findAccountsByUser(@Param('cedula') cedula: string) {
+    return this.userService.findAccountsByUser(cedula);
   }
 
-  @Get(':idUser/account/:idAccount/movements')
+  @Get(':cedula/account/:idAccount/movements')
   findMovementsByAccountByUser(
-    @Param('idUser', ParseIntPipe) idUser: number,
-    @Param('idAccount', ParseIntPipe) idAccount: number,
+    @Param('cedula') cedula: string,
+    @Param('idAccount') idAccount: string,
   ) {
-    return this.userService.findMovementsByAccountByUser(idUser, idAccount);
+    return this.userService.findMovementsByAccountByUser(cedula, idAccount);
   }
 
   @Post()

@@ -6,6 +6,7 @@ import { CreateUserDto, UpdateUserDto } from '../dto/user.dto';
 import { User } from '../../../database/entities/user.entity';
 import { Role } from 'src/database/entities/role.entity';
 import { Account } from 'src/database/entities/account.entity';
+import { Movement } from 'src/database/entities/movement.entity';
 
 @Injectable()
 export class UserService {
@@ -13,6 +14,7 @@ export class UserService {
     @InjectRepository(User) private userRepo: Repository<User>,
     @InjectRepository(Role) private roleRepo: Repository<Role>,
     @InjectRepository(Account) private accountRepo: Repository<Account>,
+    @InjectRepository(Movement) private movementRepo: Repository<Movement>,
   ) {}
 
   async findAll() {
@@ -23,46 +25,66 @@ export class UserService {
     return users;
   }
 
-  async findOne(id: number) {
+  // async findOne(id: number) {
+  //   const user = await this.userRepo.findOne({
+  //     where: { id },
+  //     relations: ['roles'],
+  //   });
+  //   if (!user) {
+  //     throw new NotFoundException(`User ${id} not found`);
+  //   }
+  //   return user;
+  // }
+
+  async findOne(cedula: string) {
     const user = await this.userRepo.findOne({
-      where: { id },
+      where: { identificationCard: cedula },
       relations: ['roles'],
     });
     if (!user) {
-      throw new NotFoundException(`User ${id} not found`);
+      throw new NotFoundException(`User ${cedula} not found`);
     }
     return user;
   }
 
-  async findAccountsByUser(id: number) {
+  async findAccountsByUser(cedula: string) {
     const user = await this.userRepo.findOne({
-      where: { id },
+      where: { identificationCard: cedula },
       relations: ['accounts', 'accounts.typeAccount'],
     });
     if (!user) {
-      throw new NotFoundException(`User ${id} not found`);
+      throw new NotFoundException(`User ${cedula} not found`);
     }
     return user;
   }
 
-  async findMovementsByAccountByUser(idUser: number, idAccount: number) {
+  async findMovementsByAccountByUser(cedula: string, idAccount: string) {
     const user = await this.userRepo.findOne({
-      where: { id: idUser },
+      where: { identificationCard: cedula },
     });
+
     const account = await this.accountRepo.findOne({
       where: {
-        id: idAccount,
-        user: { id: idUser },
+        accountNumber: idAccount,
+        user: { identificationCard: cedula },
       },
     });
     if (!user || !account) {
       throw new NotFoundException(`User or Account does not exist`);
     }
-    const movements = await this.accountRepo.findOne({
-      where: { id: idAccount, user: Equal(idUser) },
-      relations: ['typeAccount', 'user', 'movements', 'movements.typeMovement'],
+
+    const movements = await this.movementRepo.find({
+      where: {
+        account: { accountNumber: idAccount },
+      },
+      relations: [
+        'typeMovement',
+        'account',
+        'account.typeAccount',
+        'account.user',
+      ],
     });
-    if (movements.movements.length === 0) {
+    if (movements.length === 0) {
       throw new NotFoundException('No Registered Movements yet');
     }
     return movements;
